@@ -3,9 +3,10 @@ import { ArrowRight, FileText, Brain, Zap } from "lucide-react";
 
 interface HeroSectionProps {
   onGetStarted: () => void;
+  onViewSamples: () => void;
 }
 
-export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
+export const HeroSection = ({ onGetStarted, onViewSamples }: HeroSectionProps) => {
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gradient-subtle overflow-hidden">
       {/* Background decoration */}
@@ -44,8 +45,9 @@ export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
             variant="outline" 
             size="xl"
             className="border-primary/20 hover:bg-primary/5"
+            onClick={onViewSamples}
           >
-            View Demo
+            View Sample PRDs
             <FileText className="w-5 h-5" />
           </Button>
         </div>
