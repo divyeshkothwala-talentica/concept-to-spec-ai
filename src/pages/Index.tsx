@@ -60,6 +60,12 @@ const Index = () => {
     setClarificationResponses({});
   };
 
+  const handleBackToHeroFromPRD = () => {
+    setCurrentPhase("hero");
+    setProductData(null);
+    setClarificationResponses({});
+  };
+
   const handleBackToClarification = () => {
     setCurrentPhase("clarification");
   };
@@ -110,6 +116,7 @@ const Index = () => {
           productData={productData}
           clarificationResponses={clarificationResponses}
           onBack={handleBackToClarification}
+          onHome={handleBackToHeroFromPRD}
         />
       )}
 

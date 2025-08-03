@@ -16,6 +16,7 @@ interface ProductFormData {
   domain: string;
   targetMarket: string;
   businessGoals: string;
+  requirementsFile?: string;
 }
 
 interface ProductFormProps {
@@ -33,6 +34,7 @@ export const ProductForm = ({ onSubmit, onBack }: ProductFormProps) => {
     domain: "",
     targetMarket: "",
     businessGoals: "",
+    requirementsFile: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -53,11 +55,24 @@ export const ProductForm = ({ onSubmit, onBack }: ProductFormProps) => {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      toast({
-        title: "File Uploaded",
-        description: `${file.name} has been uploaded for processing.`,
-      });
-      // In a real implementation, this would extract data from the file
+      if (file.type === "text/markdown" || file.name.endsWith('.md')) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const content = event.target?.result as string;
+          setFormData(prev => ({ ...prev, requirementsFile: content }));
+          toast({
+            title: "Markdown File Uploaded",
+            description: `${file.name} has been processed and content extracted.`,
+          });
+        };
+        reader.readAsText(file);
+      } else {
+        toast({
+          title: "Invalid File Type",
+          description: "Please upload a .md (Markdown) file.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
@@ -89,12 +104,12 @@ export const ProductForm = ({ onSubmit, onBack }: ProductFormProps) => {
             <div className="border-2 border-dashed border-border rounded-lg p-6 text-center bg-muted/20">
               <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
               <p className="text-sm text-muted-foreground mb-2">
-                Have existing documents? Upload them for auto-extraction
+                Have existing requirements? Upload a .md file for auto-extraction
               </p>
               <input
                 type="file"
                 onChange={handleFileUpload}
-                accept=".pdf,.doc,.docx,.txt"
+                accept=".md"
                 className="hidden"
                 id="file-upload"
               />
